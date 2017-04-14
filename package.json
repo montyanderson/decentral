@@ -1,0 +1,22 @@
+{
+  "name": "decentral",
+  "version": "1.0.0",
+  "description": "",
+  "main": "directory.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/montyanderson/decentral.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/montyanderson/decentral/issues"
+  },
+  "homepage": "https://github.com/montyanderson/decentral#readme",
+  "dependencies": {
+    "socket.io": "^1.7.3"
+  }
+}

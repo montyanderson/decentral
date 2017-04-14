@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+	</head>
+	<body>
+
+		<h1>Hi!</h1>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+
+		<script>
+		const socket = io(location.origin);
+
+		socket.on("peer", peer => {
+			console.log(peer);
+		});
+		</script>
+
+	</body>
+</html>
