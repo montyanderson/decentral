@@ -1,8 +1,6 @@
-const fs = require("fs");
-const http = require("http");
 const dgram = require("dgram");
-const socketio = require("socket.io");
 const PeerList = require("./lib/PeerList");
+const httpServer = require("./lib/httpServer");
 
 const socket = dgram.createSocket("udp4");
 const directoryAddress = process.argv[2];
@@ -29,36 +27,27 @@ socket.on("message", (msg, sender) => {
 
 		console.log(`Directory sent peer ${peer.address}:${peer.port}`);
 
-		socket.send("hi!", peer.port, peer.address);
+		socket.send(JSON.stringify({ method: "ping", params: [] }), peer.port, peer.address);
 	} else {
 		// from peer
 		peers.received(sender);
 
 		console.log(`Peer ${sender.address}:${sender.port} sent ${msg}`);
+
+		const data = JSON.parse(msg);
+
+		if(data.method == "post") {
+			httpServer.io.emit("post", data.params[0]);
+		}
 	}
 });
 
-// HTTP Server and UI
-
-const server = http.createServer((req, res) => {
-	fs.readFile(__dirname + "/public/index.html", (err, data) => {
-		if(err) {
-			throw err;
-		}
-
-		res.end(data.toString());
+httpServer.io.on("connection", client => {
+	client.on("post", post => {
+		peers.forEach(peer => {
+			const data = JSON.stringify({ method: "post", params: [post]});
+			console.log(data, peer);
+			socket.send(data, peer.port, peer.address);
+		});
 	});
 });
-
-const io = socketio(server);
-
-peers.on("peer", peer => {
-	console.log("emitted");
-	io.emit("peer", peer);
-});
-
-try {
-	server.listen(3070);
-} catch(err) {
-	console.log(err);
-}

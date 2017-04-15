@@ -8,13 +8,14 @@
 		<h1>Hi!</h1>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js"></script>
 
 		<script>
 		const socket = io(location.origin);
 
-		socket.on("peer", peer => {
-			console.log(peer);
-		});
+		socket.emit("post", "hi!");
+
+		socket.on("post", post => console.log(post));
 		</script>
 
 	</body>
